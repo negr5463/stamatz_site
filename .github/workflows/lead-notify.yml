@@ -1,0 +1,32 @@
+name: Notify lead via Telegram
+
+# Triggered remotely by the VPS backend via repository_dispatch (VPS's own
+# network cannot reach api.telegram.org directly, but this GitHub-hosted
+# runner can). Secrets never leave GitHub's servers or logs.
+on:
+  repository_dispatch:
+    types: [new_lead]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send lead to Telegram
+        env:
+          BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TICKET: ${{ github.event.client_payload.ticket }}
+          NAME: ${{ github.event.client_payload.name }}
+          CONTACT: ${{ github.event.client_payload.contact }}
+          MODEL: ${{ github.event.client_payload.model }}
+          COMMENT: ${{ github.event.client_payload.comment }}
+        run: |
+          set -euo pipefail
+          TEXT=$(printf '🚗 Новая заявка · Stamatz\n№%s\n───────────────\nИмя: %s\nКонтакт: %s\nМодель: %s\n%s───────────────\nОтправлено с сайта stamatz' \
+            "$TICKET" "$NAME" "$CONTACT" "$MODEL" \
+            "$([ -n "$COMMENT" ] && printf 'Комментарий: %s\n' "$COMMENT" || true)")
+
+          curl -sS -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
+            --data-urlencode "chat_id=${CHAT_ID}" \
+            --data-urlencode "text=${TEXT}" \
+            -o /dev/null -w 'telegram status: %{http_code}\n'
