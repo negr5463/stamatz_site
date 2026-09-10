@@ -231,6 +231,85 @@
   .specrow.price .v{color:var(--ignition-ink); font-weight:700; font-size:1.05rem; font-variant-numeric:tabular-nums;}
   .specrow.pay .v{font-family:"Work Sans",sans-serif; font-size:.82rem; color:var(--ink-soft); text-align:right;}
 
+  /* ---------- portfolio ---------- */
+  .portfolio-section{padding:3.25rem 0;}
+  .portfolio-head{max-width:34rem;}
+  .portfolio-head h2{font-size:2rem;}
+  .portfolio-head p{color:var(--ink-soft); font-size:.98rem; line-height:1.55; margin-top:.5rem;}
+  .portfolio-head .gh-profile{
+    display:inline-flex; align-items:center; gap:.4rem;
+    margin-top:.9rem;
+    font-size:.88rem; font-weight:600;
+    color:var(--ignition-ink); text-decoration:none;
+  }
+  .portfolio-head .gh-profile svg{width:1rem; height:1rem;}
+  .portfolio-head .gh-profile:hover{color:var(--ignition);}
+
+  .portfolio-grid{
+    display:grid; grid-template-columns:repeat(2, 1fr);
+    gap:1.1rem; margin-top:1.75rem;
+  }
+  @media (max-width:720px){ .portfolio-grid{grid-template-columns:1fr;} }
+
+  .portfolio-card{
+    background:var(--panel);
+    border:1px solid var(--rule);
+    border-radius:8px;
+    padding:1.2rem 1.3rem;
+    box-shadow:0 1px 2px var(--shadow);
+    display:flex; flex-direction:column;
+  }
+  .portfolio-card .model-index{
+    font-family:"Space Mono", monospace;
+    font-size:.72rem;
+    color:var(--ignition);
+    letter-spacing:.05em;
+    margin-bottom:.4rem;
+  }
+  .portfolio-card h3{
+    font-family:"Work Sans", sans-serif;
+    text-transform:none;
+    font-size:1.05rem;
+    font-weight:700;
+    color:var(--ink);
+    margin:0;
+  }
+  .portfolio-card p{
+    font-size:.88rem;
+    line-height:1.55;
+    color:var(--ink-soft);
+    margin:.5rem 0 0;
+    flex:1;
+  }
+  .portfolio-foot{
+    display:flex; align-items:center; justify-content:space-between;
+    gap:.75rem; margin-top:1rem;
+  }
+  .lang-dot{
+    display:inline-flex; align-items:center; gap:.4rem;
+    font-family:"Space Mono", monospace;
+    font-size:.76rem;
+    color:var(--ink-faint);
+  }
+  .lang-dot::before{
+    content:""; width:.55rem; height:.55rem; border-radius:50%;
+    background:var(--lang-color, var(--ink-faint));
+  }
+  .portfolio-card a.repo-link{
+    display:inline-flex; align-items:center; gap:.35rem;
+    font-size:.85rem; font-weight:600;
+    color:var(--ignition-ink); text-decoration:none;
+  }
+  .portfolio-card a.repo-link:hover{color:var(--ignition);}
+  .portfolio-card a.repo-link svg{width:.95rem; height:.95rem;}
+  .portfolio-note{
+    margin-top:1.1rem;
+    font-size:.8rem;
+    color:var(--ink-faint);
+    line-height:1.5;
+    max-width:34rem;
+  }
+
   /* ---------- form ---------- */
   .form-section{padding:3.25rem 0 3.5rem;}
   .form-head{max-width:34rem;}
@@ -304,6 +383,7 @@
       <a href="#tabl">Таблицы</a>
       <a href="#parser">Парсинг</a>
       <a href="#sites">Сайты</a>
+      <a href="#portfolio">Портфолио</a>
     </nav>
     <a class="topbar-cta" href="#form">Оставить заявку →</a>
   </div>
@@ -438,6 +518,73 @@
         <div class="specrow pay"><span class="k">Оплата</span><span class="v">после согласования, ссылка Т-Касса</span></div>
       </div>
     </div>
+  </section>
+
+  <section class="portfolio-section" id="portfolio">
+    <div class="portfolio-head">
+      <h2>Портфолио</h2>
+      <p>Реальный код, не картинки в презентации — каждая карточка ведёт на репозиторий на GitHub.</p>
+      <a class="gh-profile" href="https://github.com/negr5463" target="_blank" rel="noopener">
+        <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+        github.com/negr5463
+      </a>
+    </div>
+
+    <div class="portfolio-grid">
+      <div class="portfolio-card">
+        <div class="model-index">Модель 01 / Бот</div>
+        <h3>stamatz-bot</h3>
+        <p>Telegram-бот на aiogram: карточки услуг и цен, раздел с частыми вопросами, пошаговый приём заявки с сохранением в CSV и уведомлением админу в Telegram.</p>
+        <div class="portfolio-foot">
+          <span class="lang-dot" style="--lang-color:#3572A5;">Python</span>
+          <a class="repo-link" href="https://github.com/negr5463/stamatz-bot" target="_blank" rel="noopener">
+            <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+            Репозиторий
+          </a>
+        </div>
+      </div>
+
+      <div class="portfolio-card">
+        <div class="model-index">Модель 02 / Таблицы</div>
+        <h3>grossbukh1</h3>
+        <p>Автосборка отчёта в Excel из сырых заявок: листы «Сводка», «Заявки», «Платежи» на формулах COUNTIF/SUMIFS. В репозитории — демо-версия с вымышленными данными.</p>
+        <div class="portfolio-foot">
+          <span class="lang-dot" style="--lang-color:#3572A5;">Python</span>
+          <a class="repo-link" href="https://github.com/negr5463/grossbukh1" target="_blank" rel="noopener">
+            <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+            Репозиторий
+          </a>
+        </div>
+      </div>
+
+      <div class="portfolio-card">
+        <div class="model-index">Модель 03 / Парсинг</div>
+        <h3>parser</h3>
+        <p>Два скрипта-парсера: собирает каталог книжного интернет-магазина в CSV с пересчётом цены в рубли, второй — свежие новости из Википедии через официальный API.</p>
+        <div class="portfolio-foot">
+          <span class="lang-dot" style="--lang-color:#3572A5;">Python</span>
+          <a class="repo-link" href="https://github.com/negr5463/parser" target="_blank" rel="noopener">
+            <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+            Репозиторий
+          </a>
+        </div>
+      </div>
+
+      <div class="portfolio-card">
+        <div class="model-index">Модель 04 / Сайт</div>
+        <h3>stamatz_site</h3>
+        <p>Тот самый сайт, который вы сейчас смотрите: адаптивная вёрстка, форма заявки и автодеплой на сервер по git push — тоже открытый исходник.</p>
+        <div class="portfolio-foot">
+          <span class="lang-dot" style="--lang-color:#e34c26;">HTML</span>
+          <a class="repo-link" href="https://github.com/negr5463/stamatz_site" target="_blank" rel="noopener">
+            <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+            Репозиторий
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <p class="portfolio-note">grossbukh1 — портфолио-версия с вымышленными данными (см. README репозитория): показываю технику на примере, а не чужие или реальные цифры клиентов. parser — учебный проект на открытых источниках, демонстрирует тот же подход, что использую в платных заказах на парсинг.</p>
   </section>
 
   <section class="form-section" id="form">
