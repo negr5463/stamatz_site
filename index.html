@@ -1,0 +1,551 @@
+<title>Stamatz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Work+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap">
+<style>
+  :root{
+    --asphalt: #1E2124;
+    --ink: #24272A;
+    --ink-soft: #62676D;
+    --ink-faint: #8A9098;
+    --fog: #EEF0EF;
+    --panel: #FAFAF9;
+    --panel-alt: #E7E9E8;
+    --rule: #D3D6D4;
+    --ignition: #C85A20;
+    --ignition-ink: #A8481A;
+    --ignition-soft: #F7E3D3;
+    --warn: #9A6B1E;
+    --warn-soft: #F3E6C9;
+    --shadow: rgba(30,33,36,0.08);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink: #ECEEEC;
+      --ink-soft: #A6ABA8;
+      --ink-faint: #767C79;
+      --fog: #15171A;
+      --panel: #1C1F22;
+      --panel-alt: #22262A;
+      --rule: #33383C;
+      --ignition: #E87C3E;
+      --ignition-ink: #F09A63;
+      --ignition-soft: rgba(232,124,62,0.14);
+      --warn: #E0B65C;
+      --warn-soft: rgba(224,182,92,0.14);
+      --shadow: rgba(0,0,0,0.35);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink: #ECEEEC;
+    --ink-soft: #A6ABA8;
+    --ink-faint: #767C79;
+    --fog: #15171A;
+    --panel: #1C1F22;
+    --panel-alt: #22262A;
+    --rule: #33383C;
+    --ignition: #E87C3E;
+    --ignition-ink: #F09A63;
+    --ignition-soft: rgba(232,124,62,0.14);
+    --warn: #E0B65C;
+    --warn-soft: rgba(224,182,92,0.14);
+    --shadow: rgba(0,0,0,0.35);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--fog);
+    color:var(--ink);
+    font-family:"Work Sans", ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{font-family:"Big Shoulders Display", "Arial Narrow", sans-serif; text-transform:uppercase; letter-spacing:.01em; text-wrap:balance; margin:0;}
+  .mono{font-family:"Space Mono", ui-monospace, "SF Mono", Consolas, monospace;}
+  a{color:inherit;}
+  .wrap{max-width:1040px; margin:0 auto; padding:0 1.5rem;}
+  section{scroll-margin-top:4.5rem;}
+
+  /* ---------- top bar ---------- */
+  .topbar{
+    position:sticky; top:0; z-index:10;
+    background:var(--fog);
+    border-bottom:1px solid var(--rule);
+  }
+  .topbar-inner{
+    max-width:1040px; margin:0 auto; padding:0 1.5rem;
+    display:flex; align-items:center; justify-content:space-between;
+    height:3.6rem; gap:1rem;
+  }
+  .plate{
+    font-family:"Big Shoulders Display", sans-serif;
+    font-weight:700;
+    font-size:1.2rem;
+    letter-spacing:.04em;
+    border:2px solid var(--ink);
+    border-radius:4px;
+    padding:.1rem .55rem .05rem;
+    line-height:1.3;
+  }
+  .topnav{display:flex; gap:1.35rem; font-size:.85rem; color:var(--ink-soft);}
+  .topnav a{text-decoration:none;}
+  .topnav a:hover{color:var(--ignition);}
+  .topbar-cta{
+    font-size:.85rem;
+    font-weight:600;
+    color:var(--ignition-ink);
+    text-decoration:none;
+    white-space:nowrap;
+  }
+  @media (max-width:720px){ .topnav{display:none;} }
+
+  :is(a,button):focus-visible{outline:2px solid var(--ignition); outline-offset:2px;}
+
+  /* ---------- hero ---------- */
+  .hero{padding:3rem 0 2.75rem;}
+  .hero-grid{display:flex; gap:2.5rem; align-items:flex-start; flex-wrap:wrap;}
+  .hero-text{flex:1 1 26rem; min-width:0;}
+  .gauge{flex:0 0 auto; width:110px; height:78px; color:var(--ignition);}
+  h1.headline{
+    font-size:clamp(2.2rem, 5.2vw, 3.4rem);
+    font-weight:800;
+    line-height:.98;
+    color:var(--ink);
+  }
+  .lede{
+    max-width:38rem;
+    font-size:1.05rem;
+    line-height:1.6;
+    color:var(--ink-soft);
+    margin:1.1rem 0 0;
+  }
+  .mileage{
+    display:inline-block;
+    margin-top:1.1rem;
+    font-size:.78rem;
+    font-family:"Space Mono", monospace;
+    color:var(--ink-faint);
+    border:1px dashed var(--rule);
+    border-radius:4px;
+    padding:.3rem .6rem;
+  }
+  .origin{
+    margin-top:1.6rem;
+    max-width:38rem;
+    padding:1rem 1.2rem;
+    background:var(--panel);
+    border-left:3px solid var(--ignition);
+    border-radius:0 6px 6px 0;
+    font-size:.92rem;
+    line-height:1.55;
+    color:var(--ink-soft);
+  }
+  .origin b{color:var(--ink); font-weight:600;}
+
+  .lineup{
+    display:flex; gap:.6rem; flex-wrap:wrap;
+    margin-top:1.75rem;
+  }
+  .lineup a{
+    font-size:.82rem;
+    font-weight:600;
+    text-decoration:none;
+    color:var(--ink);
+    background:var(--panel);
+    border:1px solid var(--rule);
+    border-radius:20px;
+    padding:.4rem .95rem;
+  }
+  .lineup a:hover{border-color:var(--ignition); color:var(--ignition-ink);}
+  .lineup .idx{color:var(--ignition); margin-right:.35rem;}
+
+  /* ---------- model sections ---------- */
+  .model{padding:3rem 0;}
+  .model.alt{background:var(--panel-alt);}
+  .model-inner{display:grid; grid-template-columns:1.15fr 1fr; gap:2.5rem; align-items:start;}
+  @media (max-width:800px){ .model-inner{grid-template-columns:1fr;} }
+
+  .model-index{
+    font-family:"Space Mono", monospace;
+    font-size:.78rem;
+    color:var(--ignition);
+    letter-spacing:.05em;
+    margin-bottom:.5rem;
+  }
+  .model h2{font-size:1.9rem; margin-bottom:.55rem;}
+  .model .usp{font-size:1rem; color:var(--ink-soft); line-height:1.55; max-width:32rem;}
+
+  .komplekt{list-style:none; margin:1.1rem 0 0; padding:0;}
+  .komplekt li{
+    display:flex; gap:.55rem;
+    font-size:.92rem;
+    padding:.4rem 0;
+    border-bottom:1px solid var(--rule);
+    color:var(--ink);
+  }
+  .komplekt li:last-child{border-bottom:none;}
+  .komplekt li::before{content:"—"; color:var(--ignition); flex:0 0 auto;}
+
+  .cta-row{margin-top:1.4rem; display:flex; align-items:center; gap:1rem; flex-wrap:wrap;}
+  .btn{
+    display:inline-block;
+    font-family:"Work Sans", sans-serif;
+    font-weight:600;
+    font-size:.92rem;
+    color:#fff;
+    background:var(--ignition);
+    border:none;
+    border-radius:6px;
+    padding:.7rem 1.3rem;
+    cursor:pointer;
+    text-decoration:none;
+  }
+  .btn:hover{background:var(--ignition-ink);}
+
+  .specsheet{
+    background:var(--panel);
+    border:1px solid var(--rule);
+    border-radius:8px;
+    overflow:hidden;
+    box-shadow:0 1px 2px var(--shadow);
+  }
+  .model.alt .specsheet{background:var(--panel);}
+  .specsheet-head{
+    font-size:.72rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+    padding:.7rem 1.1rem;
+    border-bottom:1px solid var(--rule);
+  }
+  .specrow{
+    display:flex; justify-content:space-between; gap:1rem;
+    padding:.75rem 1.1rem;
+    border-bottom:1px solid var(--rule);
+    font-size:.88rem;
+  }
+  .specrow:last-child{border-bottom:none;}
+  .specrow .k{color:var(--ink-soft); flex:0 0 40%;}
+  .specrow .v{color:var(--ink); text-align:right; font-family:"Space Mono", monospace; font-size:.85rem;}
+  .specrow.price .v{color:var(--ignition-ink); font-weight:700; font-size:1.05rem; font-variant-numeric:tabular-nums;}
+  .specrow.pay .v{font-family:"Work Sans",sans-serif; font-size:.82rem; color:var(--ink-soft); text-align:right;}
+
+  /* ---------- form ---------- */
+  .form-section{padding:3.25rem 0 3.5rem;}
+  .form-head{max-width:34rem;}
+  .form-head h2{font-size:2rem;}
+  .form-head p{color:var(--ink-soft); font-size:.98rem; line-height:1.55; margin-top:.5rem;}
+
+  form{
+    margin-top:1.75rem;
+    background:var(--panel);
+    border:1px solid var(--rule);
+    border-radius:8px;
+    padding:1.6rem;
+    max-width:34rem;
+    display:grid;
+    gap:1.05rem;
+    box-shadow:0 1px 2px var(--shadow);
+  }
+  .field label{
+    display:block;
+    font-size:.78rem;
+    letter-spacing:.03em;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+    margin-bottom:.4rem;
+  }
+  .field input, .field select, .field textarea{
+    width:100%;
+    font-family:"Work Sans", sans-serif;
+    font-size:.95rem;
+    color:var(--ink);
+    background:var(--fog);
+    border:1px solid var(--rule);
+    border-radius:5px;
+    padding:.6rem .7rem;
+  }
+  .field textarea{resize:vertical; min-height:4.5rem;}
+  .field input:focus-visible, .field select:focus-visible, .field textarea:focus-visible{
+    outline:2px solid var(--ignition); outline-offset:1px;
+  }
+  .form-note{font-size:.8rem; color:var(--ink-faint); line-height:1.5;}
+  .guarantee{
+    margin-top:1.4rem;
+    font-size:.85rem;
+    color:var(--ink-soft);
+    max-width:34rem;
+  }
+
+  /* ---------- footer ---------- */
+  footer{
+    border-top:1px solid var(--rule);
+    padding:2rem 0 2.5rem;
+    font-size:.85rem;
+    color:var(--ink-soft);
+  }
+  .foot-row{display:flex; justify-content:space-between; gap:1.5rem; flex-wrap:wrap; align-items:flex-start;}
+  .foot-contact{display:flex; flex-direction:column; gap:.4rem; align-items:flex-end;}
+  .foot-contact a{color:var(--ignition-ink); text-decoration:none; font-weight:600;}
+  .ip-todo{
+    margin-top:1.4rem;
+    font-size:.78rem;
+    color:var(--ink-faint);
+    font-family:"Space Mono", monospace;
+  }
+</style>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <span class="plate">STAMATZ</span>
+    <nav class="topnav">
+      <a href="#boty">Боты</a>
+      <a href="#tabl">Таблицы</a>
+      <a href="#parser">Парсинг</a>
+      <a href="#sites">Сайты</a>
+    </nav>
+    <a class="topbar-cta" href="#form">Оставить заявку →</a>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <section class="hero">
+    <div class="hero-grid">
+      <div class="hero-text">
+        <h1 class="headline">Заводится с полпинка,<br>работает на совесть.</h1>
+        <p class="lede">Боты, автоматизация и сайты для небольшого бизнеса — от одного человека, а не агентства с переплатой за офис в центре.</p>
+        <span class="mileage">пробег: без вранья — старт свежий, руки набитые на пет-проектах</span>
+        <div class="origin">
+          <b>Почему «Stamatz».</b> У бабушки был серебристый Daewoo Matiz — не самый быстрый и не самый статусный, зато заводился в любой мороз и всегда довозил, куда нужно. Меня зовут Стас, и весь принцип отсюда: без пафоса, но результат доезжает до финиша.
+        </div>
+        <div class="lineup">
+          <a href="#boty"><span class="idx">01</span>Бот</a>
+          <a href="#tabl"><span class="idx">02</span>Таблицы</a>
+          <a href="#parser"><span class="idx">03</span>Парсинг</a>
+          <a href="#sites"><span class="idx">04</span>Сайт</a>
+        </div>
+      </div>
+      <svg class="gauge" viewBox="0 0 110 78" fill="none" aria-hidden="true">
+        <path d="M8 70 A47 47 0 0 1 102 70" stroke="currentColor" stroke-width="3" stroke-linecap="round" opacity="0.35"/>
+        <path d="M8 70 A47 47 0 0 1 40 25" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+        <line x1="55" y1="70" x2="30" y2="34" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="55" cy="70" r="5" fill="currentColor"/>
+      </svg>
+    </div>
+  </section>
+
+  <section class="model" id="boty">
+    <div class="model-inner">
+      <div>
+        <div class="model-index">Модель 01 / Бот</div>
+        <h2>Бот, который отвечает клиентам, пока вы заняты делом</h2>
+        <p class="usp">Telegram-бот на живом коде, не на конструкторе — отвечает на частые вопросы, принимает заявки и складывает их в чат или таблицу, пока вы не в телефоне.</p>
+        <ul class="komplekt">
+          <li>Ответы на частые вопросы по вашему сценарию</li>
+          <li>Приём заявок с сохранением истории</li>
+          <li>Кнопочное меню вместо «напишите нам»</li>
+        </ul>
+        <div class="cta-row">
+          <button class="btn" type="button" data-pick="Бот для бизнеса">Хочу такую →</button>
+        </div>
+      </div>
+      <div class="specsheet">
+        <div class="specsheet-head">Техпаспорт</div>
+        <div class="specrow"><span class="k">Срок</span><span class="v">3–5 дней</span></div>
+        <div class="specrow"><span class="k">Нужно от вас</span><span class="v">сценарий ответов</span></div>
+        <div class="specrow"><span class="k">На выходе</span><span class="v">бот + инструкция</span></div>
+        <div class="specrow price"><span class="k">Цена</span><span class="v">2 000–6 000 ₽</span></div>
+        <div class="specrow pay"><span class="k">Оплата</span><span class="v">после согласования, ссылка Т-Касса</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="model alt" id="tabl">
+    <div class="model-inner">
+      <div>
+        <div class="model-index">Модель 02 / Таблицы</div>
+        <h2>Отчёт, который сам считает то, что вы считаете руками</h2>
+        <p class="usp">Excel или Google Sheets настраиваю так, чтобы отчёт собирался сам — вы просто вносите данные, а формулы и напоминания работают за вас.</p>
+        <ul class="komplekt">
+          <li>Автоматический пересчёт отчёта из сырых данных</li>
+          <li>Напоминания на почту или в Telegram</li>
+          <li>Форма → таблица без ручного переноса</li>
+        </ul>
+        <div class="cta-row">
+          <button class="btn" type="button" data-pick="Автоматизация таблиц">Хочу такую →</button>
+        </div>
+      </div>
+      <div class="specsheet">
+        <div class="specsheet-head">Техпаспорт</div>
+        <div class="specrow"><span class="k">Срок</span><span class="v">2–4 дня</span></div>
+        <div class="specrow"><span class="k">Нужно от вас</span><span class="v">пример таблицы</span></div>
+        <div class="specrow"><span class="k">На выходе</span><span class="v">формулы + инструкция</span></div>
+        <div class="specrow price"><span class="k">Цена</span><span class="v">1 500–4 000 ₽</span></div>
+        <div class="specrow pay"><span class="k">Оплата</span><span class="v">после согласования, ссылка Т-Касса</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="model" id="parser">
+    <div class="model-inner">
+      <div>
+        <div class="model-index">Модель 03 / Парсинг</div>
+        <h2>Цены конкурентов сами приезжают к вам в таблицу</h2>
+        <p class="usp">Собираю данные с указанных сайтов — цены, объявления, наличие — и складываю в Google Sheet: разово или по расписанию.</p>
+        <ul class="komplekt">
+          <li>Сбор данных с нужных страниц в таблицу</li>
+          <li>Разовый сбор или по расписанию</li>
+          <li>Уведомление, если цена изменилась</li>
+        </ul>
+        <div class="cta-row">
+          <button class="btn" type="button" data-pick="Парсинг и мониторинг цен">Хочу такую →</button>
+        </div>
+      </div>
+      <div class="specsheet">
+        <div class="specsheet-head">Техпаспорт</div>
+        <div class="specrow"><span class="k">Срок</span><span class="v">3–5 дней</span></div>
+        <div class="specrow"><span class="k">Нужно от вас</span><span class="v">список источников</span></div>
+        <div class="specrow"><span class="k">На выходе</span><span class="v">таблица с обновлением</span></div>
+        <div class="specrow price"><span class="k">Цена</span><span class="v">1 500–5 000 ₽</span></div>
+        <div class="specrow pay"><span class="k">Оплата</span><span class="v">после согласования, ссылка Т-Касса</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="model alt" id="sites">
+    <div class="model-inner">
+      <div>
+        <div class="model-index">Модель 04 / Сайт</div>
+        <h2>Страница, куда не стыдно отправить клиента</h2>
+        <p class="usp">Одностраничный сайт-визитка под рекламу: быстро грузится, нормально выглядит с телефона и собирает заявки через форму.</p>
+        <ul class="komplekt">
+          <li>Адаптивная вёрстка под телефон и десктоп</li>
+          <li>Форма связи на странице</li>
+          <li>До 5 экранов, помогу подключить хостинг</li>
+        </ul>
+        <div class="cta-row">
+          <button class="btn" type="button" data-pick="Сайт-визитка">Хочу такую →</button>
+        </div>
+      </div>
+      <div class="specsheet">
+        <div class="specsheet-head">Техпаспорт</div>
+        <div class="specrow"><span class="k">Срок</span><span class="v">4–7 дней</span></div>
+        <div class="specrow"><span class="k">Нужно от вас</span><span class="v">текст и фото</span></div>
+        <div class="specrow"><span class="k">На выходе</span><span class="v">готовый сайт</span></div>
+        <div class="specrow price"><span class="k">Цена</span><span class="v">3 000–10 000 ₽</span></div>
+        <div class="specrow pay"><span class="k">Оплата</span><span class="v">после согласования, ссылка Т-Касса</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="form-section" id="form">
+    <div class="form-head">
+      <h2>Заявка на тест-драйв</h2>
+      <p>Опишите, что нужно — отвечу с вариантами и сроками в Telegram. Ни к чему не обязывает.</p>
+    </div>
+    <form id="lead-form">
+      <div class="field">
+        <label for="f-name">Имя</label>
+        <input id="f-name" name="name" type="text" required autocomplete="name">
+      </div>
+      <div class="field">
+        <label for="f-contact">Контакт для связи</label>
+        <input id="f-contact" name="contact" type="text" placeholder="Telegram или телефон" required>
+      </div>
+      <div class="field">
+        <label for="f-model">Какая модель интересует</label>
+        <select id="f-model" name="model">
+          <option>Ещё не решил(а)</option>
+          <option>Бот для бизнеса</option>
+          <option>Автоматизация таблиц</option>
+          <option>Парсинг и мониторинг цен</option>
+          <option>Сайт-визитка</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="f-comment">Комментарий</label>
+        <textarea id="f-comment" name="comment" placeholder="Коротко, что нужно сделать"></textarea>
+      </div>
+      <button class="btn" type="submit">Отправить заявку в Telegram →</button>
+      <p class="form-note">Кнопка переключит на Telegram с уже заполненным сообщением боту Stamatz — останется нажать «отправить» там. Не сработало? <a href="https://t.me/Stamatz_helper_bot" target="_blank" rel="noopener" style="color:var(--ignition-ink); font-weight:600;">Написать напрямую</a> или на почту <a href="mailto:sminakov2011@gmail.com" style="color:var(--ignition-ink); font-weight:600;">sminakov2011@gmail.com</a>.</p>
+    </form>
+    <p class="guarantee">Гарантия — 2 недели бесплатных правок после сдачи. Как ОСАГО, только по доброй воле.</p>
+  </section>
+
+  <footer>
+    <div class="foot-row">
+      <div>
+        <div class="plate" style="font-size:1rem;">STAMATZ</div>
+        <p style="margin:.6rem 0 0; max-width:26rem;">Заявки принимает Telegram-бот, отвечаю на них лично — это не колл-центр, а один человек, но отвечаю быстро.</p>
+      </div>
+      <div class="foot-contact">
+        <a href="https://t.me/Stamatz_helper_bot" target="_blank" rel="noopener">Бот Stamatz в Telegram →</a>
+        <a href="mailto:sminakov2011@gmail.com">sminakov2011@gmail.com →</a>
+      </div>
+    </div>
+    <div class="ip-todo">ИП Минакова А.А.</div>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  // URL Google-веб-приложения — подстраховка: заявка попадает в таблицу
+  // сразу при отправке формы, даже если клиент не смог/не стал переходить
+  // в Telegram. Как получить URL и вставить сюда — см. README рядом с сайтом.
+  var SHEET_WEBHOOK_URL = 'ВСТАВЬ_СЮДА_URL_ВЕБ_ПРИЛОЖЕНИЯ';
+
+  var form = document.getElementById('lead-form');
+  var modelSelect = document.getElementById('f-model');
+  var nameInput = document.getElementById('f-name');
+
+  document.querySelectorAll('[data-pick]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      modelSelect.value = btn.getAttribute('data-pick');
+      document.getElementById('form').scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start'});
+      setTimeout(function(){ nameInput.focus(); }, 350);
+    });
+  });
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var name = document.getElementById('f-name').value.trim();
+    var contact = document.getElementById('f-contact').value.trim();
+    var model = modelSelect.value;
+    var comment = document.getElementById('f-comment').value.trim();
+
+    function pad(n){ return String(n).padStart(2, '0'); }
+    var now = new Date();
+    var ticket = pad(now.getDate()) + '.' + pad(now.getMonth() + 1) + '-' + String(Math.floor(100 + Math.random() * 900));
+    var divider = '───────────────';
+
+    var text = '🚗 Новая заявка · Stamatz\n' +
+      '№' + ticket + '\n' +
+      divider + '\n' +
+      'Имя: ' + name + '\n' +
+      'Контакт: ' + contact + '\n' +
+      'Модель: ' + model + '\n' +
+      (comment ? ('Комментарий: ' + comment + '\n') : '') +
+      divider + '\n' +
+      'Отправлено с сайта stamatz';
+
+    // 1) Сначала — гарантированно в таблицу. sendBeacon специально создан для
+    // отправки данных, которая переживёт немедленный уход со страницы
+    // (обычный fetch может оборваться, если браузер тут же уходит в Telegram).
+    if (SHEET_WEBHOOK_URL.indexOf('ВСТАВЬ_СЮДА') === -1) {
+      var payload = JSON.stringify({
+        ticket: ticket, name: name, contact: contact, model: model, comment: comment
+      });
+      if (navigator.sendBeacon) {
+        navigator.sendBeacon(SHEET_WEBHOOK_URL, payload);
+      } else {
+        fetch(SHEET_WEBHOOK_URL, { method: 'POST', mode: 'no-cors', body: payload });
+      }
+    }
+
+    // 2) Потом — попытка переключить на Telegram (бонусом, не гарантированно).
+    var url = 'https://t.me/Stamatz_helper_bot?text=' + encodeURIComponent(text);
+    window.location.href = url;
+  });
+})();
+</script>
