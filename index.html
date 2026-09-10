@@ -466,8 +466,9 @@
         <label for="f-comment">Комментарий</label>
         <textarea id="f-comment" name="comment" placeholder="Коротко, что нужно сделать"></textarea>
       </div>
-      <button class="btn" type="submit">Отправить заявку в Telegram →</button>
-      <p class="form-note">Кнопка переключит на Telegram с уже заполненным сообщением боту Stamatz — останется нажать «отправить» там. Не сработало? <a href="https://t.me/Stamatz_helper_bot" target="_blank" rel="noopener" style="color:var(--ignition-ink); font-weight:600;">Написать напрямую</a> или на почту <a href="mailto:sminakov2011@gmail.com" style="color:var(--ignition-ink); font-weight:600;">sminakov2011@gmail.com</a>.</p>
+      <input type="text" name="website" id="f-website" autocomplete="off" tabindex="-1" style="position:absolute; left:-9999px; width:1px; height:1px; opacity:0;" aria-hidden="true">
+      <button class="btn" type="submit" id="f-submit">Отправить заявку →</button>
+      <p class="form-note" id="f-status" role="status">Заявка уйдёт мне напрямую — отвечу в Telegram или на контакт, который укажете. Не сработало? Напишите на почту <a href="mailto:sminakov2011@gmail.com" style="color:var(--ignition-ink); font-weight:600;">sminakov2011@gmail.com</a>.</p>
     </form>
     <p class="guarantee">Гарантия — 2 недели бесплатных правок после сдачи. Как ОСАГО, только по доброй воле.</p>
   </section>
@@ -490,14 +491,18 @@
 
 <script>
 (function(){
-  // URL Google-веб-приложения — подстраховка: заявка попадает в таблицу
-  // сразу при отправке формы, даже если клиент не смог/не стал переходить
-  // в Telegram. Как получить URL и вставить сюда — см. README рядом с сайтом.
-  var SHEET_WEBHOOK_URL = 'ВСТАВЬ_СЮДА_URL_ВЕБ_ПРИЛОЖЕНИЯ';
+  // Заявка уходит напрямую на бэкенд сайта, который сам пересылает её
+  // мне в личный Telegram (через relay на GitHub Actions — сервер сайта
+  // не имеет прямого доступа к Telegram API). Человек никуда не
+  // переключается и ничего сам не пересылает.
+  var LEAD_API_URL = '/api/lead';
 
   var form = document.getElementById('lead-form');
   var modelSelect = document.getElementById('f-model');
   var nameInput = document.getElementById('f-name');
+  var submitBtn = document.getElementById('f-submit');
+  var statusEl = document.getElementById('f-status');
+  var defaultStatusText = statusEl.textContent;
 
   document.querySelectorAll('[data-pick]').forEach(function(btn){
     btn.addEventListener('click', function(){
@@ -507,45 +512,43 @@
     });
   });
 
+  function setStatus(text, isError){
+    statusEl.textContent = text;
+    statusEl.style.color = isError ? 'var(--warn)' : '';
+  }
+
   form.addEventListener('submit', function(e){
     e.preventDefault();
+
     var name = document.getElementById('f-name').value.trim();
     var contact = document.getElementById('f-contact').value.trim();
     var model = modelSelect.value;
     var comment = document.getElementById('f-comment').value.trim();
+    var website = document.getElementById('f-website').value; // honeypot
 
-    function pad(n){ return String(n).padStart(2, '0'); }
-    var now = new Date();
-    var ticket = pad(now.getDate()) + '.' + pad(now.getMonth() + 1) + '-' + String(Math.floor(100 + Math.random() * 900));
-    var divider = '───────────────';
+    if (!name || !contact) return;
 
-    var text = '🚗 Новая заявка · Stamatz\n' +
-      '№' + ticket + '\n' +
-      divider + '\n' +
-      'Имя: ' + name + '\n' +
-      'Контакт: ' + contact + '\n' +
-      'Модель: ' + model + '\n' +
-      (comment ? ('Комментарий: ' + comment + '\n') : '') +
-      divider + '\n' +
-      'Отправлено с сайта stamatz';
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Отправляю →';
+    setStatus('Секунду, отправляю заявку…', false);
 
-    // 1) Сначала — гарантированно в таблицу. sendBeacon специально создан для
-    // отправки данных, которая переживёт немедленный уход со страницы
-    // (обычный fetch может оборваться, если браузер тут же уходит в Telegram).
-    if (SHEET_WEBHOOK_URL.indexOf('ВСТАВЬ_СЮДА') === -1) {
-      var payload = JSON.stringify({
-        ticket: ticket, name: name, contact: contact, model: model, comment: comment
+    fetch(LEAD_API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: name, contact: contact, model: model, comment: comment, website: website })
+    })
+      .then(function(res){ return res.json().then(function(data){ return { ok: res.ok, data: data }; }); })
+      .then(function(result){
+        if (!result.ok || !result.data.ok) throw new Error('lead_failed');
+        submitBtn.textContent = 'Заявка отправлена ✓';
+        setStatus('Готово! Заявка №' + result.data.ticket + ' у меня, отвечу в Telegram или на указанный контакт.', false);
+        form.reset();
+      })
+      .catch(function(){
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Отправить заявку →';
+        setStatus('Не получилось отправить. Попробуйте ещё раз или напишите на почту sminakov2011@gmail.com.', true);
       });
-      if (navigator.sendBeacon) {
-        navigator.sendBeacon(SHEET_WEBHOOK_URL, payload);
-      } else {
-        fetch(SHEET_WEBHOOK_URL, { method: 'POST', mode: 'no-cors', body: payload });
-      }
-    }
-
-    // 2) Потом — попытка переключить на Telegram (бонусом, не гарантированно).
-    var url = 'https://t.me/Stamatz_helper_bot?text=' + encodeURIComponent(text);
-    window.location.href = url;
   });
 })();
 </script>
